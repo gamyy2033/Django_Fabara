@@ -1,0 +1,33 @@
+{% extends "plantilla.html" %}
+
+{% block contenido %}
+<div class="container mt-5">
+    <h3 class="mb-4 text-center text-danger fw-bold" style="font-family: 'Georgia', serif;">Lista de Proyectos</h3>
+    <div class="row justify-content-center">
+        {% for proyecto in proyectos %}
+        <div class="col-md-4 mb-4">
+            <div class="card border-danger">
+                <div class="card-body">
+                    <h5 class="card-title text-danger" style="font-family: 'Georgia', serif; font-weight: bold;">{{ proyecto.nombre }}</h5>
+                    <p class="card-text"><strong>Descripción:</strong> {{ proyecto.descripcion }}</p>
+                    <p class="card-text"><strong>Fecha de Entrega:</strong> {{ proyecto.fecha_entrega }}</p>
+                    <div class="d-flex justify-content-between">
+                        <!-- Botón de detalles -->
+                        <a href="{% url 'detallesProyecto' proyecto.id %}" class="btn btn-danger">Detalles</a>
+
+                        <!-- Botón de editar -->
+                        <a href="{% url 'editar_proyecto' proyecto.id %}" class="btn btn-warning btn-sm">Editar</a>
+
+                        <!-- Formulario para eliminar -->
+                        <form action="{% url 'eliminar_proyecto' proyecto.id %}" method="post" class="delete-form" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

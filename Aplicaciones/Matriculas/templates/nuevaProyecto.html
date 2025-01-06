@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Proyecto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            background-color: #7B241C; /* Rojo cocha de vino */
+            width: 250px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 20px;
+        }
+
+        .sidebar .nav-link,
+        .sidebar .navbar-brand {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .sidebar .nav-link:hover {
+            color: #f8f9fa !important;
+        }
+
+        .sidebar .navbar-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .container {
+            margin-left: 250px; /* Space for the sidebar */
+            padding: 20px;
+            flex: 1;
+        }
+
+        footer {
+            background-color: #7B241C; /* Rojo cocha de vino */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        #error-message {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a class="navbar-brand ms-3" href="/">Sistema de gestion de proyectos</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/listadoProyecto/">Ver Lista</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Mensajes Flash -->
+    <div class="alert-container">
+        <div id="error-message" class="alert alert-danger" style="display: none;"></div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div class="container mt-4">
+        <h1>CREAR PROYECTO</h1>
+
+        <form method="post" id="project-form">
+            {% csrf_token %}
+
+            <div class="form-group mb-3">
+                <label for="name">NOMBRE:</label>
+                <input type="text" name="nombre" class="form-control" id="name" placeholder="NOMBRE" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="description">DESCRIPCIÓN:</label>
+                <textarea name="descripcion" class="form-control" id="description" placeholder="DESCRIPCIÓN" required></textarea>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="deadline">FECHA DE ENTREGA:</label>
+                <input type="date" name="fecha_entrega" class="form-control" id="deadline" required>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" value="True" name="estado" id="estado">
+                <label class="form-check-label" for="estado">ESTADO (ACTIVO)</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">GUARDAR</button>
+            <a href="{% url 'listadoProyecto' %}" class="btn btn-secondary">REGRESAR</a>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy;| Utc - 2025 | </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+    <!-- JavaScript para validación y mensajes -->
+    <script>
+        $(document).ready(function () {
+            // Validación de formulario
+            $("#project-form").on("submit", function (e) {
+                e.preventDefault();
+
+                let errorMessage = "";
+                let isValid = true;
+
+                // Limpiar el mensaje de error anterior
+                $("#error-message").html("").hide();
+
+                // Validar mayúsculas
+                if ($("#name").val() !== $("#name").val().toUpperCase()) {
+                    isValid = false;
+                    errorMessage += "El nombre debe estar en mayúsculas.<br>";
+                }
+
+                if ($("#description").val() !== $("#description").val().toUpperCase()) {
+                    isValid = false;
+                    errorMessage += "La descripción debe estar en mayúsculas.<br>";
+                }
+
+                // Validar campos vacíos
+                if (!$("#name").val()) {
+                    errorMessage += "El nombre es obligatorio.<br>";
+                    isValid = false;
+                }
+
+                if (!$("#description").val()) {
+                    errorMessage += "La descripción es obligatoria.<br>";
+                    isValid = false;
+                }
+
+                if (!$("#deadline").val()) {
+                    errorMessage += "La fecha de entrega es obligatoria.<br>";
+                    isValid = false;
+                }
+
+                // Si hay errores, mostrar mensaje de error
+                if (!isValid) {
+                    $("#error-message").html(errorMessage).show();
+                } else {
+                    // Si es válido, enviar el formulario
+                    this.submit();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
