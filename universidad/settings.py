@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-ge5^$3pa9(l_xb^!yanwphnqgkbv$^pp8o(b9n(pvdl-ul%pm6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django_fabara.onrender.com']
+ALLOWED_HOSTS = ['django-fabara.onrender.com', 'localhost', '127.0.0.1']
+
 
 
 
